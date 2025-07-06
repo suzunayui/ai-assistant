@@ -1,0 +1,1800 @@
+/* リセットとベース設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* ヘッダー */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: white;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+}
+
+/* メインコンテンツ */
+main {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* 入力セクション */
+.input-section {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.input-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.url-input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+.url-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.url-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.url-input-container .url-input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.save-url-btn {
+    padding: 8px 12px;
+    min-width: 40px;
+    background: #28a745;
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.save-url-btn:hover:not(:disabled) {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.save-url-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.btn-warning {
+    background: #ff6b6b;
+    color: white;
+}
+
+.btn-warning:hover:not(:disabled) {
+    background: #ff5252;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ステータスセクション */
+.status-section {
+    margin-bottom: 25px;
+}
+
+.status-label {
+    padding: 10px 15px;
+    background: #e9ecef;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #6c757d;
+    transition: all 0.3s ease;
+}
+
+.status-label.connected {
+    background: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+/* チャットセクション */
+.chat-section h2 {
+    margin-bottom: 15px;
+    color: #495057;
+    font-size: 1.5rem;
+}
+
+.chat-area {
+    height: 400px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    background: #ffffff;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.chat-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.chat-area::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.chat-area::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* チャットメッセージスタイル */
+.chat-message {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    animation: fadeIn 0.3s ease;
+}
+
+.chat-message.system {
+    background: #cce5ff;
+    color: #004085;
+    border-left: 4px solid #007bff;
+}
+
+.chat-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.chat-message.user {
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+}
+
+.chat-message.ai-response {
+    background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+    border-left: 4px solid #4caf50;
+    position: relative;
+}
+
+.chat-message.ai-response::before {
+    content: "🤖";
+    position: absolute;
+    left: -2px;
+    top: 5px;
+    background: #4caf50;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.chat-message.spam {
+    background: #2a1a1a;
+    border-left: 4px solid #ff5722;
+    opacity: 0.7;
+}
+
+.chat-message.spam .username {
+    color: #ff5722;
+}
+
+.chat-message.spam .message {
+    color: #ffab91;
+    font-style: italic;
+}
+
+.chat-timestamp {
+    color: #6c757d;
+    font-size: 12px;
+    margin-right: 8px;
+}
+
+.chat-author {
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.chat-text {
+    color: #333;
+}
+
+/* ユーザーバッジ */
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 4px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: #007bff;
+    color: white;
+}
+
+.badge.owner {
+    background: #dc3545;
+}
+
+.badge.mod {
+    background: #28a745;
+}
+
+.badge.verified {
+    background: #17a2b8;
+}
+
+.badge.member {
+    background: #ffc107;
+    color: #212529;
+}
+
+/* チャット統計情報 */
+.chat-stats {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.chat-stats span {
+    background: white;
+    padding: 4px 8px;
+    border-radius: 3px;
+    border: 1px solid #e9ecef;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* AI設定セクション */
+.ai-settings-section {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f0f8ff;
+    border-radius: 10px;
+    border: 2px solid #b3d9ff;
+}
+
+.ai-settings-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #1976d2;
+}
+
+.setting-item {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.setting-item label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.api-key-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* スピーカー選択 */
+.speaker-select {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    margin-right: 10px;
+}
+
+.speaker-select option {
+    padding: 8px;
+}
+
+/* API Key状態表示 */
+.api-key-status {
+    font-size: 12px;
+    margin-left: 10px;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+.api-key-status.loaded {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.api-key-status.missing {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* VOICEVOX ステータス表示のスタイル */
+.voicevox-status {
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.voicevox-status.error {
+    color: #d8000c;
+    background-color: #ffbaba;
+    border: 1px solid #d8000c;
+}
+
+.voicevox-status.success {
+    color: #4f8a10;
+    background-color: #dff2bf;
+    border: 1px solid #4f8a10;
+}
+
+.voicevox-status.loading {
+    color: #9f6000;
+    background-color: #feefb3;
+    border: 1px solid #9f6000;
+}
+
+/* 読み上げ設定セクション */
+.reading-settings-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reading-settings-section h3 {
+    margin: 0 0 20px 0;
+    color: #495057;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.reading-settings-section h4 {
+    margin: 15px 0 10px 0;
+    color: #6c757d;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.setting-section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+/* NGワード設定 */
+.ng-word-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+}
+
+.ng-word-section h5 {
+    margin: 0 0 10px 0;
+    color: #ffffff;
+    font-size: 1.1em;
+}
+
+.ng-word-section .setting-description {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: #bbb;
+    line-height: 1.4;
+}
+
+.ng-words-textarea {
+    width: 100%;
+    min-height: 80px;
+    max-height: 120px;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #1e1e1e;
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 0.9em;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.ng-words-textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.ng-words-textarea::placeholder {
+    color: #888;
+}
+
+/* 名前読み方設定 */
+.name-pronunciation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.pronunciation-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.name-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.pronunciation-list {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px;
+    background: white;
+}
+
+.pronunciation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.pronunciation-item:last-child {
+    border-bottom: none;
+}
+
+.pronunciation-text {
+    font-size: 14px;
+    color: #495057;
+}
+
+.pronunciation-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.pronunciation-delete:hover {
+    background: #c82333;
+}
+
+/* 性格設定のスタイル */
+.personality-container {
+    margin-top: 10px;
+}
+
+.personality-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.personality-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* VOICEVOX辞書登録のスタイル */
+.dictionary-container {
+    margin-top: 10px;
+}
+
+.dictionary-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.dict-input {
+    flex: 1;
+    min-width: 120px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.dict-select {
+    flex: 0 0 120px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    font-size: 14px;
+}
+
+.dictionary-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px;
+    background: white;
+    margin-bottom: 10px;
+}
+
+.dictionary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.dictionary-item:last-child {
+    border-bottom: none;
+}
+
+.dictionary-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #495057;
+}
+
+.dictionary-surface {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.dictionary-reading {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.dictionary-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.dictionary-delete:hover {
+    background: #c82333;
+}
+
+/* トリガーワード設定 */
+.trigger-words-container {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.trigger-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.trigger-word-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.trigger-words-list {
+    margin: 15px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.trigger-word-item {
+    display: flex;
+    align-items: center;
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #1976d2;
+}
+
+.trigger-word-item .remove-trigger-word {
+    background: none;
+    border: none;
+    color: #f44336;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 8px;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trigger-word-item .remove-trigger-word:hover {
+    background: #ffebee;
+}
+
+/* 単語別話者設定のスタイル */
+.word-speaker-container {
+    padding: 15px;
+    background: #e8f5e8;
+    border-radius: 8px;
+    border: 1px solid #c8e6c9;
+    margin-top: 15px;
+}
+
+.word-speaker-container h5 {
+    margin: 0 0 15px 0;
+    color: #2e7d32;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.word-speaker-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.word-speaker-word-input {
+    flex: 2;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.word-speaker-word-input:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.word-speaker-word-input::placeholder {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.word-speaker-select {
+    flex: 2;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.word-speaker-select:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.word-speaker-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #c8e6c9;
+    border-radius: 6px;
+    padding: 10px;
+    background: white;
+    margin-bottom: 15px;
+}
+
+.word-speaker-list:empty::before {
+    content: "まだ単語別話者設定がありません";
+    color: #6c757d;
+    font-style: italic;
+    font-size: 14px;
+    display: block;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.word-speaker-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.word-speaker-item:last-child {
+    border-bottom: none;
+}
+
+.word-speaker-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #495057;
+    flex: 1;
+}
+
+.word-speaker-keyword {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #2e7d32;
+}
+
+.word-speaker-name {
+    font-size: 12px;
+    color: #4caf50;
+    font-weight: 500;
+}
+
+.word-speaker-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.word-speaker-delete:hover {
+    background: #c82333;
+}
+
+.add-word-speaker-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.add-word-speaker-btn:hover:not(:disabled) {
+    background: #388e3c;
+    transform: translateY(-1px);
+}
+
+.add-word-speaker-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 単語別話者設定の詳細スタイル */
+.word-speaker-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    font-size: 14px;
+}
+
+.trigger-word {
+    font-weight: 600;
+    color: #2e7d32;
+    background: #e8f5e8;
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.speaker-arrow {
+    color: #666;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.speaker-name {
+    font-weight: 500;
+    color: #1976d2;
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex: 1;
+}
+
+.word-speaker-item .remove-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.word-speaker-item .remove-btn:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+/* スクロールバーのスタイル調整 */
+.replacement-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.replacement-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.replacement-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.replacement-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    main {
+        padding: 20px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .chat-area {
+        height: 300px;
+    }
+    
+    /* チャット読み替え設定のレスポンシブ対応 */
+    .replacement-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .replacement-from-input,
+    .replacement-to-input {
+        min-width: unset;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .replacement-text {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .replacement-arrow {
+        margin: 0 4px;
+    }
+    
+    /* 単語別話者設定のレスポンシブ対応 */
+    .word-speaker-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .word-speaker-word-input,
+    .word-speaker-select {
+        min-width: unset;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .word-speaker-text {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+/* ===== カスタム絵文字読み方設定 ===== */
+.emoji-pronunciation-container {
+    padding: 15px;
+    background: #fff3e0;
+    border-radius: 8px;
+    border: 1px solid #ffcc80;
+    margin-top: 15px;
+}
+
+.emoji-pronunciation-container h5 {
+    margin: 0 0 15px 0;
+    color: #ef6c00;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.emoji-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.emoji-name-input,
+.emoji-reading-input {
+    flex: 1;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.emoji-input {
+    flex: 1;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.emoji-name-input:focus,
+.emoji-reading-input:focus,
+.emoji-input:focus {
+    outline: none;
+    border-color: #ff9800;
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.1);
+}
+
+.emoji-name-input::placeholder,
+.emoji-reading-input::placeholder,
+.emoji-input::placeholder {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.add-emoji-reading-btn {
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.add-emoji-reading-btn:hover:not(:disabled) {
+    background: #f57c00;
+    transform: translateY(-1px);
+}
+
+.add-emoji-reading-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.emoji-reading-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ffcc80;
+    border-radius: 6px;
+    padding: 10px;
+    background: white;
+    margin-bottom: 15px;
+}
+
+.emoji-reading-list:empty::before {
+    content: "まだカスタム絵文字読み方設定がありません";
+    color: #6c757d;
+    font-style: italic;
+    font-size: 14px;
+    display: block;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.emoji-reading-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.emoji-reading-item:last-child {
+    border-bottom: none;
+}
+
+.emoji-name {
+    font-weight: 600;
+    color: #ef6c00;
+    background: #fff3e0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.emoji-reading {
+    font-weight: 500;
+    color: #1976d2;
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.emoji-remove-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.emoji-remove-btn:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+/* ===== チャット読み替え設定 ===== */
+.chat-replacement-container {
+    padding: 15px;
+    background: #f3e5f5;
+    border-radius: 8px;
+    border: 1px solid #ce93d8;
+    margin-top: 15px;
+}
+
+.chat-replacement-container h5 {
+    margin: 0 0 15px 0;
+    color: #7b1fa2;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.replacement-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.replacement-from-input,
+.replacement-to-input {
+    flex: 1;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.replacement-from-input:focus,
+.replacement-to-input:focus {
+    outline: none;
+    border-color: #9c27b0;
+    box-shadow: 0 0 0 2px rgba(156, 39, 176, 0.1);
+}
+
+.replacement-from-input::placeholder,
+.replacement-to-input::placeholder {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.add-replacement-btn {
+    background: #9c27b0;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.add-replacement-btn:hover:not(:disabled) {
+    background: #7b1fa2;
+    transform: translateY(-1px);
+}
+
+.add-replacement-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.replacement-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ce93d8;
+    border-radius: 6px;
+    padding: 10px;
+    background: white;
+    margin-bottom: 15px;
+}
+
+.replacement-list:empty::before {
+    content: "まだチャット読み替え設定がありません";
+    color: #6c757d;
+    font-style: italic;
+    font-size: 14px;
+    display: block;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.replacement-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.replacement-item:last-child {
+    border-bottom: none;
+}
+
+.replacement-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    font-size: 14px;
+}
+
+.replacement-original {
+    font-weight: 600;
+    color: #7b1fa2;
+    background: #f3e5f5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.replacement-arrow {
+    color: #666;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.replacement-text {
+    font-weight: 500;
+    color: #1976d2;
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex: 1;
+}
+
+/* ===== 連投荒らし対策設定 ===== */
+.anti-spam-container {
+    padding: 15px;
+    background: #ffebee;
+    border-radius: 8px;
+    border: 1px solid #ef9a9a;
+    margin-top: 15px;
+}
+
+.anti-spam-container h5,
+.anti-spam-container h6 {
+    margin: 0 0 15px 0;
+    color: #c62828;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.anti-spam-container h6 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.anti-spam-stats {
+    background: white;
+    border: 1px solid #ef9a9a;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.stats-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #c62828;
+}
+
+.anti-spam-settings {
+    background: white;
+    border: 1px solid #ef9a9a;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.anti-spam-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.user-reset-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.user-input {
+    flex: 1;
+    min-width: 120px;
+    padding: 6px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.spammer-list {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ef9a9a;
+    border-radius: 4px;
+    padding: 8px;
+    background: white;
+}
+
+.spammer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid #f1f3f4;
+    font-size: 12px;
+}
+
+.spammer-item:last-child {
+    border-bottom: none;
+}
+
+.spammer-name {
+    font-weight: 600;
+    color: #c62828;
+}
+
+.spammer-count {
+    color: #666;
+}
+
+.spammer-status,
+.spammer-cooldown {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.spammer-status {
+    background: #e8f5e8;
+    color: #2e7d32;
+}
+
+.spammer-cooldown {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.spam-reset-section {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.spam-reset-input {
+    flex: 1;
+    min-width: 150px;
+    padding: 6px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #c82333;
+}
+
+/* ===== 設定ファイル管理 ===== */
+.config-file-management {
+    padding: 15px;
+    background: #e8f4fd;
+    border-radius: 8px;
+    border: 1px solid #81d4fa;
+    margin-top: 15px;
+}
+
+.config-info {
+    margin-bottom: 15px;
+}
+
+.config-path {
+    margin-top: 15px;
+}
+
+.config-path label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.config-path-display {
+    background: white;
+    border: 1px solid #81d4fa;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 12px;
+    color: #495057;
+    word-break: break-all;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.config-path-display:hover {
+    background: #f8f9fa;
+    border-color: #29b6f6;
+}
+
+.config-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.config-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.config-btn-primary {
+    background: #2196f3;
+    color: white;
+}
+
+.config-btn-primary:hover:not(:disabled) {
+    background: #1976d2;
+    transform: translateY(-1px);
+}
+
+.config-btn-success {
+    background: #4caf50;
+    color: white;
+}
+
+.config-btn-success:hover:not(:disabled) {
+    background: #388e3c;
+    transform: translateY(-1px);
+}
+
+.config-btn-warning {
+    background: #ff9800;
+    color: white;
+}
+
+.config-btn-warning:hover:not(:disabled) {
+    background: #f57c00;
+    transform: translateY(-1px);
+}
+
+.config-btn-danger {
+    background: #f44336;
+    color: white;
+}
+
+.config-btn-danger:hover:not(:disabled) {
+    background: #d32f2f;
+    transform: translateY(-1px);
+}
+
+.config-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.6;
+}
+
+/* ===== 共通のリストアイテムスタイル統一 ===== */
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f4;
+    transition: background-color 0.2s ease;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* ===== 削除ボタンの統一スタイル ===== */
+.remove-btn,
+.delete-btn,
+.pronunciation-delete,
+.dictionary-delete,
+.emoji-remove-btn,
+.word-speaker-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.remove-btn:hover,
+.delete-btn:hover,
+.pronunciation-delete:hover,
+.dictionary-delete:hover,
+.emoji-remove-btn:hover,
+.word-speaker-delete:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+}
+
+/* ===== 入力グループの統一スタイル ===== */
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.input-group input,
+.input-group select {
+    flex: 1;
+    min-width: 150px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.input-group input::placeholder {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* ===== 設定セクションの統一スタイル ===== */
+.setting-container {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.setting-container:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.setting-container h5 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* ===== 音声設定セクション ===== */
+.voice-settings-container {
+    padding: 15px;
+    background: #f0f4ff;
+    border-radius: 8px;
+    border: 1px solid #b3d9ff;
+    margin-top: 15px;
+}
+
+.voice-settings-container h5 {
+    margin: 0 0 15px 0;
+    color: #1976d2;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.voice-slider-container {
+    margin-bottom: 15px;
+}
+
+.voice-slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.voice-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #e9ecef;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+.voice-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1976d2;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.voice-slider::-webkit-slider-thumb:hover {
+    background: #1565c0;
+    transform: scale(1.1);
+}
+
+.voice-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1976d2;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.voice-value {
+    font-weight: 600;
+    color: #1976d2;
+    min-width: 50px;
+    text-align: right;
+}
+
+.setting-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.setting-input:focus {
+    outline: none;
+    border-color: #f44336;
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.1);
+}

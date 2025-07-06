@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none';">
+    <title>AIアシスタント</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AIアシスタント</h1>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <label for="channelUrl">チャンネルURL:</label>
+                <div class="url-input-container">
+                    <input 
+                        type="url" 
+                        id="channelUrl" 
+                        placeholder="例: https://www.youtube.com/@suzunayui"
+                        class="url-input"
+                        list="channelUrlHistory"
+                    >
+                    <datalist id="channelUrlHistory">
+                        <!-- 履歴がここに動的に追加される -->
+                    </datalist>
+                    <button id="saveChannelUrlBtn" class="btn btn-small save-url-btn" title="チャンネルURLを保存">💾</button>
+                </div>
+                <div class="button-group">
+                    <button id="connectBtn" class="btn btn-primary">チャット接続</button>
+                    <button id="disconnectBtn" class="btn btn-secondary" disabled>切断</button>
+                </div>
+            </div>
+
+            <div class="ai-settings-section">
+                <h3>AI応答設定</h3>
+                <div class="setting-item">
+                    <label for="aiEnabled">
+                        <input type="checkbox" id="aiEnabled" checked>
+                        AI応答機能を有効にする（「こもち」への反応）
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="voiceEnabled">
+                        <input type="checkbox" id="voiceEnabled" checked>
+                        VOICEVOX音声読み上げを有効にする
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <button id="refreshSpeakers" class="btn btn-small">VOICEVOX話者リスト更新</button>
+                    <span id="voicevoxStatus" class="voicevox-status"></span>
+                </div>
+                <div class="setting-item">
+                    <label for="openaiApiKey">OpenAI API Key:</label>
+                    <input type="password" id="openaiApiKey" placeholder="sk-..." class="api-key-input">
+                    <button id="saveApiKey" class="btn btn-small">保存</button>
+                    <span id="apiKeyStatus" class="api-key-status"></span>
+                </div>
+            </div>
+
+            <div class="reading-settings-section">
+                <h3>音声読み上げ設定</h3>
+                <div class="setting-item">
+                    <label for="readAllChats">
+                        <input type="checkbox" id="readAllChats" checked>
+                        全チャットを音声読み上げ
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="chatSpeakerSelect">� チャット読み上げ話者:</label>
+                    <select id="chatSpeakerSelect" class="speaker-select">
+                        <option value="1">ずんだもん（ノーマル）</option>
+                    </select>
+                    <div class="setting-description">一般チャットメッセージの読み上げに使用</div>
+                    
+                    <!-- チャット音声設定 -->
+                    <div class="voice-settings">
+                        <div class="voice-setting-item">
+                            <label for="chatVolumeSlider">音量: <span id="chatVolumeValue">50%</span></label>
+                            <input type="range" id="chatVolumeSlider" min="0" max="100" value="50" class="volume-slider">
+                        </div>
+                        <div class="voice-setting-item">
+                            <label for="chatSpeedSlider">話速: <span id="chatSpeedValue">1.0x</span></label>
+                            <input type="range" id="chatSpeedSlider" min="50" max="200" value="100" class="speed-slider">
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="komochiSpeakerSelect">🤖 こもち応答話者:</label>
+                    <select id="komochiSpeakerSelect" class="speaker-select">
+                        <option value="3">ずんだもん（ツンツン）</option>
+                    </select>
+                    <div class="setting-description">AIが生成したこもちの応答の読み上げに使用</div>
+                    
+                    <!-- こもち音声設定 -->
+                    <div class="voice-settings">
+                        <div class="voice-setting-item">
+                            <label for="komochiVolumeSlider">音量: <span id="komochiVolumeValue">50%</span></label>
+                            <input type="range" id="komochiVolumeSlider" min="0" max="100" value="50" class="volume-slider">
+                        </div>
+                        <div class="voice-setting-item">
+                            <label for="komochiSpeedSlider">話速: <span id="komochiSpeedValue">1.0x</span></label>
+                            <input type="range" id="komochiSpeedSlider" min="50" max="200" value="100" class="speed-slider">
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="readUserName">
+                        <input type="checkbox" id="readUserName" checked>
+                        ユーザー名も読み上げ
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="readTimestamp">
+                        <input type="checkbox" id="readTimestamp">
+                        時刻も読み上げ
+                    </label>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>カスタム絵文字読み方設定</h4>
+                    <div class="emoji-pronunciation-container">
+                        <div class="emoji-input-group">
+                            <input type="text" id="emojiName" placeholder="絵文字名（:omotiKomochi:など）" class="emoji-input">
+                            <input type="text" id="emojiReading" placeholder="読み方（おもちこもちなど）" class="emoji-input">
+                            <button id="addEmojiReading" class="btn btn-small">追加</button>
+                        </div>
+                        <div id="emojiReadingList" class="emoji-reading-list"></div>
+                        <p class="setting-description">:_omotiKomochi: などのカスタム絵文字の読み方を設定します</p>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>NGワード設定</h4>
+                    <div class="ng-words-container">
+                        <div class="ng-word-section">
+                            <h5>🚫 スキップ用NGワード</h5>
+                            <p class="setting-description">これらのワードが含まれているメッセージは完全にスキップされ、読み上げられません</p>
+                            <textarea id="ngWordsSkipTextarea" placeholder="スキップしたいワードを改行区切りで入力" class="ng-words-textarea"></textarea>
+                            <button id="saveNgWordsSkip" class="btn btn-small">スキップ用NGワード保存</button>
+                        </div>
+                        
+                        <div class="ng-word-section">
+                            <h5>🔇 除去用NGワード（マスク）</h5>
+                            <p class="setting-description">これらのワードだけを***に置き換えて、残りの部分は読み上げます</p>
+                            <textarea id="ngWordsRemoveTextarea" placeholder="マスクしたいワードを改行区切りで入力" class="ng-words-textarea"></textarea>
+                            <button id="saveNgWordsRemove" class="btn btn-small">除去用NGワード保存</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>名前読み方設定</h4>
+                    <div class="name-pronunciation-container">
+                        <div class="pronunciation-input-group">
+                            <input type="text" id="originalName" placeholder="元の名前" class="name-input">
+                            <input type="text" id="pronunciationName" placeholder="読み方" class="name-input">
+                            <button id="addPronunciation" class="btn btn-small">追加</button>
+                        </div>
+                        <div id="pronunciationList" class="pronunciation-list"></div>
+
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>チャット読み替え設定</h4>
+                    <div class="chat-replacement-container">
+                        <div class="replacement-input-group">
+                            <input type="text" id="originalChatWord" placeholder="置き換え元の単語" class="replacement-from-input">
+                            <input type="text" id="replacementChatWord" placeholder="置き換え先の単語" class="replacement-to-input">
+                            <button id="addChatReplacement" class="btn btn-small add-replacement-btn">追加</button>
+                        </div>
+                        <div id="chatReplacementList" class="replacement-list"></div>
+
+                        <p class="setting-description">チャット内の特定の単語を別の単語に置き換えて読み上げます（例：「w」→「わら」）</p>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>単語別話者設定</h4>
+                    <div class="word-speaker-container">
+                        <div class="word-speaker-input-group">
+                            <input type="text" id="triggerWordForSpeaker" placeholder="キーワード（例：おめでとう、悲しい）" class="word-speaker-word-input">
+                            <select id="speakerForWord" class="word-speaker-select">
+                                <option value="1">ずんだもん（ノーマル）</option>
+                            </select>
+                            <button id="addWordSpeaker" class="btn btn-small add-word-speaker-btn">追加</button>
+                        </div>
+                        <div id="wordSpeakerList" class="word-speaker-list"></div>
+
+                        <p class="setting-description">特定の単語が含まれるチャットの読み上げ話者を変更します（例：「おめでとう」→明るい声、「悲しい」→落ち着いた声）</p>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>AI反応トリガーワード設定</h4>
+                    <div class="trigger-words-container">
+                        <div class="trigger-input-group">
+                            <input type="text" id="newTriggerWord" placeholder="新しいトリガーワード" class="trigger-word-input">
+                            <button id="addTriggerWord" class="btn btn-small">追加</button>
+                        </div>
+                        <div id="triggerWordsList" class="trigger-words-list"></div>
+                        <button id="saveTriggerWords" class="btn btn-small">トリガーワード保存</button>
+                        <p class="setting-description">設定したワードがチャットに含まれるとAIが反応します</p>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>こもちの性格設定</h4>
+                    <div class="personality-container">
+                        <textarea id="personalityTextarea" placeholder="こもちの性格や話し方の特徴を入力してください（例：関西弁で話す、猫っぽい話し方をする、など）" class="personality-textarea"></textarea>
+                        <button id="savePersonality" class="btn btn-small">性格設定保存</button>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>VOICEVOX辞書登録</h4>
+                    <div class="dictionary-container">
+                        <div class="dictionary-input-group">
+                            <input type="text" id="dictSurface" placeholder="表記（例：OpenAI）" class="dict-input">
+                            <input type="text" id="dictReading" placeholder="読み（例：オープンエーアイ）" class="dict-input">
+                            <select id="dictPartOfSpeech" class="dict-select">
+                                <option value="PROPER_NOUN">固有名詞</option>
+                                <option value="COMMON_NOUN">普通名詞</option>
+                                <option value="VERB">動詞</option>
+                                <option value="ADJECTIVE">形容詞</option>
+                                <option value="SUFFIX">接尾辞</option>
+                            </select>
+                            <button id="addDictionary" class="btn btn-small">辞書追加</button>
+                        </div>
+                        <div id="dictionaryList" class="dictionary-list"></div>
+                        <button id="refreshDictionary" class="btn btn-small">辞書更新</button>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>🛡️ 連投荒らし対策</h4>
+                    <div class="anti-spam-container">
+                        <div class="anti-spam-stats">
+                            <h5>スパム統計</h5>
+                            <div id="spamStatsDisplay" class="stats-display">
+                                <div class="stat-item">
+                                    <span class="stat-label">監視中ユーザー:</span>
+                                    <span id="totalUsers" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">クールダウン中:</span>
+                                    <span id="usersInCooldown" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">最近のアクティブユーザー:</span>
+                                    <span id="activeUsers" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">5分間のメッセージ数:</span>
+                                    <span id="recentActivity" class="stat-value">0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="top-spammers">
+                                <h6>違反回数上位</h6>
+                                <div id="topSpammersList" class="spammer-list"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="anti-spam-controls">
+                            <button id="refreshSpamStats" class="btn btn-small">統計更新</button>
+                            <button id="resetAllSpamHistory" class="btn btn-danger">全履歴リセット</button>
+                            <div class="user-reset-container">
+                                <input type="text" id="userResetInput" placeholder="ユーザー名" class="user-input">
+                                <button id="resetUserSpamHistory" class="btn btn-small">個別リセット</button>
+                            </div>
+                        </div>
+                        
+                        <div class="anti-spam-settings">
+                            <h6>スパム検出設定</h6>
+                            <div class="setting-item">
+                                <label for="maxMessagesPerMinute">1分間最大メッセージ数:</label>
+                                <input type="number" id="maxMessagesPerMinute" min="1" max="20" value="5" class="setting-input">
+                            </div>
+                            <div class="setting-item">
+                                <label for="maxMessagesPerFiveMinutes">5分間最大メッセージ数:</label>
+                                <input type="number" id="maxMessagesPerFiveMinutes" min="5" max="50" value="15" class="setting-input">
+                            </div>
+                            <div class="setting-item">
+                                <label for="duplicateThreshold">重複判定閾値 (0.1-1.0):</label>
+                                <input type="number" id="duplicateThreshold" min="0.1" max="1.0" step="0.1" value="0.8" class="setting-input">
+                            </div>
+                            <div class="setting-item">
+                                <label for="cooldownDuration">クールダウン時間（秒）:</label>
+                                <input type="number" id="cooldownDuration" min="10" max="300" value="30" class="setting-input">
+                            </div>
+                            <button id="saveAntiSpamSettings" class="btn btn-small">設定保存</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h4>📁 設定ファイル管理</h4>
+                    <div class="config-file-management">
+                        <div class="config-info">
+                            <p class="setting-description">
+                                全ての設定は1つのJSONファイルに保存されます。<br>
+                                設定のバックアップや他の環境への移行に便利です。
+                            </p>
+                        </div>
+                        <div class="config-actions">
+                            <button id="openConfigFolder" class="btn btn-primary" type="button" role="button" tabindex="0">📂 設定フォルダーを開く</button>
+                            <button id="exportConfig" class="btn btn-secondary" type="button" role="button" tabindex="0">📤 設定をエクスポート</button>
+                            <button id="importConfig" class="btn btn-secondary" type="button" role="button" tabindex="0">📥 設定をインポート</button>
+                            <button id="resetConfig" class="btn btn-danger" type="button" role="button" tabindex="0">🔄 設定をリセット</button>
+                        </div>
+                        <div class="config-path">
+                            <label>設定ファイルパス:</label>
+                            <div id="configFilePath" class="config-path-display">読み込み中...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-section">
+                <div id="liveUrlStatus" class="status-label">ライブURL: 未接続</div>
+                <div id="chatStats" class="chat-stats" style="display: none;">
+                    <span id="connectionTime"></span>
+                    <span id="messageCount">受信メッセージ: 0件</span>
+                    <span id="filteredCount">フィルタ済み: 0件</span>
+                    <span id="audioQueueStatus">音声キュー: 0件</span>
+                    <button id="clearAudioQueueBtn" class="btn btn-small btn-warning" style="margin-left: 10px;">キュークリア</button>
+                </div>
+            </div>
+
+            <div class="chat-section">
+                <h2>チャット:</h2>
+                <div id="chatArea" class="chat-area"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

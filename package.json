@@ -1,0 +1,82 @@
+{
+  "name": "ai-assistant-komochi",
+  "version": "1.0.0",
+  "description": "Node.jsとElectronを使用したAIアシスタントデスクトップアプリケーションです。YouTubeライブ配信のチャットを取得・読み上げし、AIが応答します。",
+  "main": "main.js",
+  "scripts": {
+    "start": "set NODE_OPTIONS=--max_old_space_size=4096 && chcp 65001 > nul && electron .",
+    "start-utf8": "powershell -Command \"[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; electron .\"",
+    "dev": "electron . --enable-logging",
+    "build": "electron-builder",
+    "build-win": "electron-builder --win",
+    "build-mac": "electron-builder --mac",
+    "build-linux": "electron-builder --linux",
+    "package": "electron-packager . ai-assistant-komochi --platform=win32 --arch=x64 --out=dist --overwrite",
+    "package-single": "npm run package && powershell -Command \"Compress-Archive -Path 'dist\\ai-assistant-komochi-win32-x64\\*' -DestinationPath 'dist\\ai-assistant-komochi-portable.zip' -Force\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "youtube",
+    "chat",
+    "live",
+    "electron",
+    "desktop"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "openai": "^5.8.2",
+    "puppeteer": "^24.11.2",
+    "ws": "^8.18.3",
+    "youtube-chat": "^2.2.0"
+  },
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12",
+    "electron-builder-squirrel-windows": "^26.0.12",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.komochi.ai-assistant",
+    "productName": "ai-assistant",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!.git/**/*",
+      "!README.md"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "verifyUpdateCodeSignature": false,
+      "forceCodeSigning": false,
+      "compression": "maximum",
+      "signAndEditExecutable": false,
+      "signExts": null,
+      "artifactName": "${productName}-setup-${version}.${ext}"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
