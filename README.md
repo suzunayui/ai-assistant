@@ -2,6 +2,10 @@
 
 Node.jsとElectronを使用してYouTubeライブ配信のチャットをリアルタイムで取得・表示し、「こもち」への言及に対してOpenAI GPT-4.1-nanoとVOICEVOXで自動応答するデスクトップアプリケーションです。
 
+## インストール
+
+📦 **簡単インストール**: [リリースページ](https://github.com/suzunayui/ai-assistant/releases/)からインストーラーをダウンロード
+
 ## 特徴
 
 - 🎯 **簡単操作**: チャンネルURLを入力するだけ
