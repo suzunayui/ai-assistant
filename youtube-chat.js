@@ -96,7 +96,8 @@ async function startChatListener(videoIdOrChannelUrl, onMessage, useChannelId = 
         throw new Error('チャンネルIDが抽出できませんでした。ビデオIDで接続を試みます。');
       }
     } else {
-      // ビデオIDを使用する場合
+      // ビデオIDを使用する場合（修正版ライブラリの安定性向上）
+      console.log(`ビデオIDを使用: ${videoIdOrChannelUrl}`);
       liveChat = new LiveChat({ 
         liveId: videoIdOrChannelUrl,
         ignoreFirstResponse: true
@@ -125,7 +126,7 @@ async function startChatListener(videoIdOrChannelUrl, onMessage, useChannelId = 
       });
     });
     
-    // chat イベント - 正しいAPIを使用
+    // chat イベント - 修正版ライブラリの新機能に対応
     liveChat.on('chat', (chatItem) => {
       try {
         // 実際の投稿時間を取得
@@ -148,7 +149,7 @@ async function startChatListener(videoIdOrChannelUrl, onMessage, useChannelId = 
           return;
         }
         
-        // メッセージテキストを構築
+        // メッセージテキストを構築（修正版の新しいチャットタイプに対応）
         let messageText = '';
         if (chatItem.message && Array.isArray(chatItem.message)) {
           messageText = chatItem.message.map(item => {
@@ -164,6 +165,13 @@ async function startChatListener(videoIdOrChannelUrl, onMessage, useChannelId = 
         } else if (typeof chatItem.message === 'string') {
           messageText = chatItem.message;
         }
+        
+        // スーパーチャットの情報を取得
+        const superChatInfo = chatItem.superchat ? {
+          amount: chatItem.superchat.amount,
+          color: chatItem.superchat.color,
+          hasSticker: !!chatItem.superchat.sticker
+        } : null;
         
         // 複数の時間フォーマットを提供
         const timeFormats = {
@@ -185,22 +193,75 @@ async function startChatListener(videoIdOrChannelUrl, onMessage, useChannelId = 
           isVerified: chatItem.isVerified || false,
           isModerator: chatItem.isModerator || false,
           isOwner: chatItem.isOwner || false,
-          isMembership: chatItem.isMembership || false
+          isMembership: chatItem.isMembership || false,
+          superChat: superChatInfo, // スーパーチャット情報
+          channelId: chatItem.author?.channelId, // チャンネルID
+          badge: chatItem.author?.badge // バッジ情報
         };
         
-        console.log(`新しいチャット [${message.fullTimestamp}] ${message.author}: ${message.message}`);
+        // スーパーチャットやメンバーシップメッセージの場合はログに特別表示
+        let logPrefix = '新しいチャット';
+        if (superChatInfo) {
+          logPrefix = `スーパーチャット(${superChatInfo.amount})`;
+        } else if (message.isMembership) {
+          logPrefix = 'メンバーシップ';
+        }
+        
+        console.log(`${logPrefix} [${message.fullTimestamp}] ${message.author}: ${message.message}`);
         onMessage(message);
       } catch (error) {
         console.error('チャットメッセージ処理エラー:', error);
+        console.error('エラーの詳細:', {
+          chatItem: chatItem,
+          error: error.stack
+        });
       }
     });
     
-    // error イベント
+    // error イベント - より詳細なエラー情報を取得
     liveChat.on('error', (error) => {
-      console.error('YouTubeチャットエラー:', error);
+      console.error('YouTubeチャットエラー詳細:', {
+        message: error?.message || 'メッセージなし',
+        stack: error?.stack || 'スタックトレースなし',
+        name: error?.name || '名前なし',
+        code: error?.code || 'コードなし',
+        fullError: error
+      });
+      
+      // エラーの種類を判定して適切なメッセージを表示
+      let errorMessage = 'エラーが発生しました';
+      
+      if (error && typeof error === 'object') {
+        if (error.message) {
+          if (error.message.includes('Video unavailable')) {
+            errorMessage = 'ライブ配信が見つからないか、配信が終了しています';
+          } else if (error.message.includes('Chat is disabled')) {
+            errorMessage = 'このライブ配信ではチャットが無効になっています';
+          } else if (error.message.includes('Private video')) {
+            errorMessage = 'このライブ配信は非公開です';
+          } else if (error.message.includes('network') || error.message.includes('fetch')) {
+            errorMessage = 'ネットワークエラーが発生しました。接続を確認してください';
+          } else {
+            errorMessage = `エラー: ${error.message}`;
+          }
+        } else {
+          // メッセージがない場合はオブジェクトの内容を確認
+          const errorKeys = Object.keys(error);
+          if (errorKeys.length > 0) {
+            errorMessage = `エラー情報: ${JSON.stringify(error, null, 2)}`;
+          } else {
+            errorMessage = 'Unknown error occurred (empty error object)';
+          }
+        }
+      } else if (typeof error === 'string') {
+        errorMessage = `エラー: ${error}`;
+      } else {
+        errorMessage = `Unknown error type: ${typeof error}`;
+      }
+      
       onMessage({
         author: 'システム',
-        message: `エラー: ${error.message || error}`,
+        message: errorMessage,
         timestamp: new Date().toLocaleTimeString(),
         type: 'error'
       });
