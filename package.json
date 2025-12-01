@@ -1,6 +1,6 @@
 {
   "name": "ai-assistant-komochi",
-  "version": "2025.7.17",
+  "version": "2025.12.02",
   "description": "Node.jsとElectronを使用したAIアシスタントデスクトップアプリケーションです。YouTubeライブ配信のチャットを取得・読み上げし、AIが応答します。",
   "main": "main.js",
   "scripts": {
