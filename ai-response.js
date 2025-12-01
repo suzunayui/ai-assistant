@@ -532,7 +532,12 @@ async function processMessage(message, userName, onResponse, settings = {}) {
       console.log(`ボットユーザーをスキップ: ${userName}`);
       return; // ボットの場合は処理を終了
     }
-    
+
+    // ユーザー名の先頭に@がある場合は除去（2025年12月2日、ハンドル名対応）
+    if (userName.startsWith("@")) {
+        userName = userName.slice(1);
+    }
+
     // この処理のベースシーケンス番号を確保（同一処理内での順序保証）
     const baseSequence = ++sequenceNumber;
     
